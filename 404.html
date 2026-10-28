@@ -990,7 +990,9 @@ async function initDistant() {
 function horloge() { const d = new Date(); $('#clock').textContent = d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' }) + ' · ' + hhmm(d); }
 /* Démarrage : rendu immédiat en local, puis connexion */
 horloge(); setInterval(horloge, 20000);
-go(RENDU[state.vue] ? state.vue : 'cockpit');
+const vueHash = location.hash.replace('#', '');
+go(RENDU[vueHash] ? vueHash : (RENDU[state.vue] ? state.vue : 'cockpit'));
+window.addEventListener('hashchange', () => { const h = location.hash.replace('#', ''); if (RENDU[h] && h !== state.vue) go(h); });
 initDistant();
 window.addEventListener('online', () => { if (!remote.ok) initDistant(); });
 window.addEventListener('offline', () => setConn(false, 'Hors ligne · données locales'));
